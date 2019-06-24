@@ -1,0 +1,48 @@
+body{
+    background-color: #000055;
+    color: white;
+}
+
+/* div{
+    border-style: dotted;
+    border-width: 0.5px;
+} */
+
+a{
+    color: rgb(108, 178, 236);
+}
+
+
+.main-area{
+    border-width: 1px;
+}
+.button-area{
+    margin-bottom: 30px;
+    border-style: solid;
+    border-width: 0px 0px 1px 0px;
+}
+
+.single-item{
+    margin: 10px;
+}
+
+.single-button{
+    margin: 10px;
+}
+
+
+
+.view-item{
+    display: inline-block;
+    margin: 10px
+}
+.view-image{
+    height: 120px;
+    width: auto;
+}
+
+
+#input-area{
+    border-style: solid;
+    border-width: 0px 0px 0px 1px;
+}
