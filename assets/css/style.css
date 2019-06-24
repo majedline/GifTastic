@@ -31,18 +31,17 @@ a{
 }
 
 
-
 .view-item{
     display: inline-block;
     margin: 10px
+    
 }
-.view-image{
-    height: 120px;
-    width: auto;
-}
+
+
 
 
 #input-area{
     border-style: solid;
     border-width: 0px 0px 0px 1px;
 }
+
