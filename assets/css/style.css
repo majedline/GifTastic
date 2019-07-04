@@ -12,6 +12,9 @@ a{
     color: rgb(108, 178, 236);
 }
 
+.header{
+    text-align: center;
+}
 
 .main-area{
     border-width: 1px;

@@ -1,4 +1,12 @@
-var topics = ["Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore"];
+var topics = ["The World", "Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore"];
+
+
+function buildGifyButtons() {
+    $("#menu-items").empty();
+    for (var i = 0; i < topics.length; i++) {
+        buildGifyButton(i, topics[i], topics[i]);
+    }
+}
 
 // function that builds the button menue. 
 // It takes and ID to define this button and control the remove event on the A, the URL to load the view-item area, and the buttonText
@@ -17,9 +25,12 @@ function buildGifyButton(id, topic, buttonText) {
     $("#menu-items").append(btn);
 }
 
+
+// when the menu button is clicked, this handler is called to make the call tothe webservices
 function buttonClickHandler() {
 
-    var btnURL = buildSearchURL($(this).attr("data-topic"), 5);
+    var numOfTopics = $("#img-count").val();
+    var btnURL = buildSearchURL($(this).attr("data-topic"), numOfTopics);
     console.log(btnURL);
 
     $.ajax({
@@ -30,6 +41,7 @@ function buttonClickHandler() {
     });
 }
 
+// show the images to the view area
 function showImages(response) {
     $("#view-area").empty();
     console.log("showImage called. the response is:");
@@ -38,7 +50,8 @@ function showImages(response) {
     var gifsToDisplay = response.data;
 
     for (var i = 0; i < gifsToDisplay.length; i++) {
-        var txt = "<p>This GIF is rated " + gifsToDisplay[i].rating + "<p>";
+        var txt = "<p>  (GIF ID " + i + ") ";
+        txt += "This GIF is rated " + gifsToDisplay[i].rating + "<p>";
         var stillImage = gifsToDisplay[i].images.original_still.url;
         var activeImage = gifsToDisplay[i].images.original.url;
 
@@ -70,17 +83,37 @@ function buildCloseLink(id) {
     return a;
 }
 
+
+
+// build the URL that will be used to make the call.
 function buildSearchURL(keyword, limit) {
+
+    var adjustedLimit = limit;
+
+
+    if (limit == null) {
+        adjustedLimit = 10;
+
+    } else if (limit < 1) {
+        adjustedLimit = 1;
+
+    } else if (limit > 30) {
+        adjustedLimit = 30;
+
+    } // else nothing to do
+
+    $("#img-count").val(adjustedLimit);
+
+
     var url = queryURLSearch;
     url += ("&q=" + keyword);
     url += ("&rating=g");
-    url += ("&limit=" + limit);
+    url += ("&limit=" + adjustedLimit);
     console.log(url);
 
     return url;
 }
 
-// buildGifyCard("./assets/images/sample-cat2.jpg","./assets/images/sample-cat2.jpg", "xyz xyz xyz xyz xyz xyz xyz xyz xyz xyz xyz xyz ");
 
 // Function that builds the gify card on the UI. This functions takes the image URL and the corresponding text
 function buildGifyCard(gifyStillImage, gifyActiveImage, gifyText) {
@@ -90,7 +123,7 @@ function buildGifyCard(gifyStillImage, gifyActiveImage, gifyText) {
         "class": "card text-white bg-secondary",
         "style": "width: 18rem;"
     });
-    
+
     var cardImg = $("<img>").attr({
         "class": "card-img-top content-image",
         "src": gifyStillImage,
@@ -118,14 +151,15 @@ function buildGifyCard(gifyStillImage, gifyActiveImage, gifyText) {
 
 }
 
-function gifyImageClickHandler(){
+// onclick of an image, set the active or still image based on the state
+function gifyImageClickHandler() {
     var img = $(this)
     var state = img.attr("data-img-state");
     var stillImg = img.attr("data-img-still");
-    var activeImg = img.attr("data-img-active"); 
+    var activeImg = img.attr("data-img-active");
 
 
-    if (state === "still"){
+    if (state === "still") {
         img.attr("src", activeImg);
         img.attr("data-img-state", "active");
     } else {
@@ -136,10 +170,20 @@ function gifyImageClickHandler(){
 }
 
 
+
+// build the buttons for each topic
 function run() {
-    for (var i = 0; i < topics.length; i++) {
-        buildGifyButton(i, topics[i], topics[i]);
-    }
+    buildGifyButtons();
+    $("#add-giphy-button").on("click", addGiphyButtonClickHandler);
+
 }
+
+
+function addGiphyButtonClickHandler() {
+    topics.push($("#img-keyword").val().trim());
+    $("#img-keyword").val("");
+    buildGifyButtons();
+}
+
 
 run();
