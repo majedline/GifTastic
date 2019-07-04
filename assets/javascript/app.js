@@ -1,4 +1,4 @@
-var topics = ["The World", "Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore"];
+var topics = ["The World", "Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore", "Chad", "Japan"];
 
 
 function buildGifyButtons() {
@@ -49,18 +49,26 @@ function showImages(response) {
 
     var gifsToDisplay = response.data;
 
-    for (var i = 0; i < gifsToDisplay.length; i++) {
-        var txt = "<p>  (GIF ID " + i + ") ";
-        txt += "This GIF is rated " + gifsToDisplay[i].rating + "<p>";
-        var stillImage = gifsToDisplay[i].images.original_still.url;
-        var activeImage = gifsToDisplay[i].images.original.url;
+    if (response.data.length === 0) {
+        $("#view-area").html("Wow! No results!!");
 
-        buildGifyCard(stillImage, activeImage, txt);
+    } else {
 
+        for (var i = 0; i < gifsToDisplay.length; i++) {
+            var txt = "<p>  (GIF #" + i + ") " + gifsToDisplay[i].title + "<hr>";
+            txt += "This GIF is rated " + gifsToDisplay[i].rating + "<br>";
+            txt += "Original image size is " + gifsToDisplay[i].images.original_still.height + "X" + gifsToDisplay[i].images.original_still.width + "</p>";
+
+            var stillImage = gifsToDisplay[i].images.original_still.url;
+            var activeImage = gifsToDisplay[i].images.original.url;
+
+            buildGifyCard(stillImage, activeImage, txt);
+
+        }
+
+        var gtext = response.data[1].type;
+        console.log(gtext);
     }
-
-    var gtext = response.data[1].type;
-    console.log(gtext);
 
 }
 
@@ -107,7 +115,7 @@ function buildSearchURL(keyword, limit) {
 
     var url = queryURLSearch;
     url += ("&q=" + keyword);
-    url += ("&rating=g");
+    url += ("&rating=PG-13");
     url += ("&limit=" + adjustedLimit);
     console.log(url);
 
@@ -175,6 +183,15 @@ function gifyImageClickHandler() {
 function run() {
     buildGifyButtons();
     $("#add-giphy-button").on("click", addGiphyButtonClickHandler);
+
+    $("#img-keyword").on("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            addGiphyButtonClickHandler();
+        }
+    });
+
+
 
 }
 
