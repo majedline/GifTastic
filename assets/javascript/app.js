@@ -1,4 +1,4 @@
-var topics = ["The World", "Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore", "Chad", "Japan"];
+var topics = ["The World", "Canada", "Australia", "India", "Lebanon", "Palestine", "Russia", "Ghana", "Singapore", "China", "Japan"];
 
 
 function buildGifyButtons() {
@@ -53,6 +53,10 @@ function showImages(response) {
         $("#view-area").html("Wow! No results!!");
 
     } else {
+
+        var title = $("<h5>").text("Press the image to activate/deactivate");
+        $("#view-area").append(title);
+
 
         for (var i = 0; i < gifsToDisplay.length; i++) {
             var txt = "<p>  (GIF #" + i + ") " + gifsToDisplay[i].title + "<hr>";
